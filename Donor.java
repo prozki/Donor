@@ -1,226 +1,374 @@
-package krwiodawca;
-import java.util.Scanner;
-import java.time.Duration;
-import java.time.LocalDate;
-//import java.time.LocalTime;
-import java.util.Date;
-import java.text.SimpleDateFormat;
-import java.io.IOException;
-import java.text.ParseException;
+import java.time.*;
+import java.time.format.*;
+import java.io.*;
 
 public class Donor {
-	static void Main(String[] args) throws ParseException, IOException
-    {
-		Scanner scan = new Scanner(System.in);
+
+	public static void main(String[] args) throws IOException {
+		BufferedReader scan = new BufferedReader(new InputStreamReader(System.in));
         Human first = new Human(); 													//zdefiniowanie człowieka
-        double quantityDonated = 0.45;
-        int daysLeft = 56, donations;
-        double quantityYear, taxBack;
-        //Date date1 = new Date();
-        //SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy");
-
+        double quantity = 0.45, quantityYear, taxBack;
+        int donations;
+        
         System.out.print("Witaj w arkuszu krwiodawcy, jak masz na imię? ");
-        first.firstName = scan.nextLine();
-
+        first.firstName = scan.readLine();
         System.out.print("Potrzebuję Twojego wieku ");
-        first.age = scan.nextInt();
-
+        first.age = Integer.parseInt(scan.readLine());
         System.out.print("Jaka jest Twoja waga? ");
-        first.weight = scan.nextInt();
-
-        System.out.print("Potwierdź swoją płeć wciskając: \nK - Kobieta\nM - Mężczyzna ");
-        first.gender = scan.nextLine();
-
-        if ((first.gender == "M") || (first.gender == "m"))
-        {
+        first.weight = Integer.parseInt(scan.readLine());
+        System.out.print("Potwierdź swoją płeć wciskając: \nK - Kobieta\tM - Mężczyzna\n");
+        first.gender = scan.readLine();
+        if ((first.gender.equals("M")) || (first.gender.equals("m"))) {
             System.out.println("\nImię: " + first.firstName + "\nPłeć: " + first.gender + "ężczyzna" + "\nWaga: " + first.weight + "kg\nWiek: " + first.age);
-
             System.out.print("\nCzy potwierdzasz kartę? \nT - Tak\nN - Nie ");
-            String strTN = scan.nextLine();
-            if ((strTN == "T") || (strTN == "t"))
-            {
-                
-                if (first.age >= 18 && first.age <= 65)
-                {
-                    if (first.weight <= 50)
-                    {
+            String strTN = scan.readLine();
+            if ((strTN.equals("T")) || (strTN.equals("t"))) {
+                if (first.age >= 18 && first.age <= 65) {
+                    if (first.weight <= 50) {
                         System.out.println("\nPrzykro mi ale nie możesz zostać krwiodawcą, musisz ważyć minimum 50kg");
-                        System.in.read();
-                    } else if (first.weight > 50)
-                    {
+                        //System.in.read();
+                    } else if (first.weight > 50) {
                         System.out.println("\nSuper, spełniasz warunki krwiodawcy, zapraszamy do najbliższego RCKiK wraz z dowodem osobistym");
                         System.out.print("Czy oddałeś dziś krew? ");
-                        String TN = scan.nextLine();
-                        if (TN == "T" || TN == "t")
-                        {
+                        String TN = scan.readLine();
+                        if ((TN.equals("T")) || (TN.equals("t"))) {
                             donations = 1;
-                            taxBack = donations * quantityDonated * 130;
-                            Date donationDate = new Date();//.AddDays(daysLeft);
-                            System.out.println("\nSuper! Następna donacja możliwa " + Duration.ofDays(56));
+                            quantityYear = donations * quantity;
+                            taxBack = quantityYear * 130;
+                            LocalDate donationDate = LocalDate.now();
+                            LocalDate nextDonationDate = donationDate.plusDays(56);
+                            System.out.println("\nSuper! Następna donacja możliwa " + nextDonationDate + "\nW tym roku oddałeś: " + quantityYear + "l krwi, przysługuje Ci zwrot podatku w wysokości: " + taxBack + "zł.");
                             System.out.println("Czy oddawałeś krew jeszcze w tym roku?");
-                            strTN = scan.nextLine();
-                            if ((strTN == "T") || (strTN == "t"))
-                            {
+                            strTN = scan.readLine();
+                            if ((strTN.equals("T")) || (strTN.equals("t"))) {
                                 System.out.println("Ile razy? ");                //dodawanie dat donacji
-                                int howManyTimes = scan.nextInt();
-                                quantityYear = (howManyTimes + 1) * quantityDonated;
-                                switch (howManyTimes)
-                                {
+                                int howManyTimes = Integer.parseInt(scan.readLine());
+                                quantityYear = (howManyTimes + 1) * quantity;
+                                
+                                switch (howManyTimes) {
                                     case 1:
                                         {
                                             donations += donations;
-                                            taxBack = donations * quantityDonated * 130;
-                                            System.out.println("Podaj datę w formacie rrrr-mm-dd");
-                                            String strDate2 = scan.nextLine();
-                                            SimpleDateFormat sdf2 = new SimpleDateFormat("yyyy-MM-dd");
-                                            Date date2 = sdf2.parse(strDate2);
-                                            System.out.println(date2);
+                                            quantityYear = donations * quantity;
+                                            taxBack = quantityYear * 130;
+                                            System.out.println("Podaj datę w formacie rrrr-MM-dd");
+                                            String date2 = scan.readLine();
+                                            LocalDate donation2 = LocalDate.parse(date2, DateTimeFormatter.ofPattern("yyyy-MM-dd"));
+                                            LocalDate nextDonation = donation2.plusDays(56);
+                                            System.out.println("\nSuper! Następna donacja możliwa " + nextDonation + "\nW tym roku oddałeś: " + quantityYear + "l krwi, przysługuje Ci zwrot podatku w wysokości: " + taxBack + "zł.");
                                             break;
                                         }
                                     case 2:
                                         {
                                             donations = howManyTimes + 1;
-                                            taxBack = donations * quantityDonated * 130;
-                                            System.out.println("Podaj datę donacji w formacie rrrr-mm-dd");
-                                            String strDate2 = scan.nextLine();
-                                            SimpleDateFormat sdf2 = new SimpleDateFormat("yyyy-MM-dd");
-                                            Date date2 = sdf2.parse(strDate2);
-                                            System.out.println("Podaj datę kolejnej donacji w formacie rrrr-mm-dd");
-                                            String strDate3 = scan.nextLine();
-                                            SimpleDateFormat sdf3 = new SimpleDateFormat("yyyy-MM-dd");
-                                            Date date3 = sdf3.parse(strDate3);
+                                            quantityYear = donations * quantity;
+                                            taxBack = quantityYear * 130;
+                                            System.out.println("Podaj datę donacji w formacie rrrr-MM-dd");
+                                            String date2 = scan.readLine();
+                                            LocalDate donation2 = LocalDate.parse(date2, DateTimeFormatter.ofPattern("yyyy-MM-dd"));
+                                            System.out.println("Podaj datę kolejnej donacji w formacie rrrr-MM-dd");
+                                            String date3 = scan.readLine();
+                                            LocalDate donation3 = LocalDate.parse(date3, DateTimeFormatter.ofPattern("yyyy-MM-dd"));
+                                            LocalDate nextDonation = donation3.plusDays(56);
+                                            System.out.println("\nSuper! Następna donacja możliwa " + nextDonation + "\nW tym roku oddałeś: " + quantityYear + "l krwi, przysługuje Ci zwrot podatku w wysokości: " + taxBack + "zł.");
                                             break;
                                         }
                                     case 3:
                                         {
                                             donations = howManyTimes + 1;
-                                            taxBack = donations * quantityDonated * 130;
-                                            System.out.println("Podaj datę donacji w formacie rrrr-mm-dd");
-                                            String strDate2 = scan.nextLine();
-                                            SimpleDateFormat sdf2 = new SimpleDateFormat("yyyy-MM-dd");
-                                            Date date2 = sdf2.parse(strDate2);
-                                            System.out.println("Podaj datę kolejnej donacji w formacie rrrr-mm-dd");
-                                            String strDate3 = scan.nextLine();
-                                            SimpleDateFormat sdf3 = new SimpleDateFormat("yyyy-MM-dd");
-                                            Date date3 = sdf3.parse(strDate3);
-                                            System.out.println("Podaj datę kolejnej donacji w formacie rrrr-mm-dd");
-                                            String strDate4 = scan.nextLine();
-                                            SimpleDateFormat sdf4 = new SimpleDateFormat("yyyy-MM-dd");
-                                            Date date4 = sdf4.parse(strDate4);
+                                            quantityYear = donations * quantity;
+                                            taxBack = quantityYear * 130;
+                                            System.out.println("Podaj datę donacji w formacie rrrr-MM-dd");
+                                            String date2 = scan.readLine();
+                                            LocalDate donation2 = LocalDate.parse(date2, DateTimeFormatter.ofPattern("yyyy-MM-dd"));
+                                            System.out.println("Podaj datę kolejnej donacji w formacie rrrr-MM-dd");
+                                            String date3 = scan.readLine();
+                                            LocalDate donation3 = LocalDate.parse(date3, DateTimeFormatter.ofPattern("yyyy-MM-dd"));
+                                            System.out.println("Podaj datę kolejnej donacji w formacie rrrr-MM-dd");
+                                            String date4 = scan.readLine();
+                                            LocalDate donation4 = LocalDate.parse(date4, DateTimeFormatter.ofPattern("yyyy-MM-dd"));
+                                            LocalDate nextDonation = donation4.plusDays(56);
+                                            System.out.println("\nSuper! Następna donacja możliwa " + nextDonation + "\nW tym roku oddałeś: " + quantityYear + "l krwi, przysługuje Ci zwrot podatku w wysokości: " + taxBack + "zł.");
                                             break;
                                         }
                                     case 4:
                                         {
                                             donations = howManyTimes + 1;
-                                            taxBack = donations * quantityDonated * 130;
-                                            System.out.println("Podaj datę donacji w formacie rrrr-mm-dd");
-                                            String strDate2 = scan.nextLine();
-                                            SimpleDateFormat sdf2 = new SimpleDateFormat("yyyy-MM-dd");
-                                            Date date2 = sdf2.parse(strDate2);
-                                            System.out.println("Podaj datę kolejnej donacji w formacie rrrr-mm-dd");
-                                            String strDate3 = scan.nextLine();
-                                            SimpleDateFormat sdf3 = new SimpleDateFormat("yyyy-MM-dd");
-                                            Date date3 = sdf3.parse(strDate3);
-                                            System.out.println("Podaj datę kolejnej donacji w formacie rrrr-mm-dd");
-                                            String strDate4 = scan.nextLine();
-                                            SimpleDateFormat sdf4 = new SimpleDateFormat("yyyy-MM-dd");
-                                            Date date4 = sdf4.parse(strDate4);
-                                            System.out.println("Podaj datę kolejnej donacji w formacie rrrr-mm-dd");
-                                            String strDate5 = scan.nextLine();
-                                            SimpleDateFormat sdf5 = new SimpleDateFormat("yyyy-MM-dd");
-                                            Date date5 = sdf5.parse(strDate5);
+                                            quantityYear = donations * quantity;
+                                            taxBack = quantityYear * 130;
+                                            System.out.println("Podaj datę donacji w formacie rrrr-MM-dd");
+                                            String date2 = scan.readLine();
+                                            LocalDate donation2 = LocalDate.parse(date2, DateTimeFormatter.ofPattern("yyyy-MM-dd"));
+                                            System.out.println("Podaj datę kolejnej donacji w formacie rrrr-MM-dd");
+                                            String date3 = scan.readLine();
+                                            LocalDate donation3 = LocalDate.parse(date3, DateTimeFormatter.ofPattern("yyyy-MM-dd"));
+                                            System.out.println("Podaj datę kolejnej donacji w formacie rrrr-MM-dd");
+                                            String date4 = scan.readLine();
+                                            LocalDate donation4 = LocalDate.parse(date4, DateTimeFormatter.ofPattern("yyyy-MM-dd"));
+                                            System.out.println("Podaj datę kolejnej donacji w formacie rrrr-MM-dd");
+                                            String date5 = scan.readLine();
+                                            LocalDate donation5 = LocalDate.parse(date5, DateTimeFormatter.ofPattern("yyyy-MM-dd"));
+                                            LocalDate nextDonation = donation5.plusDays(56);
+                                            System.out.println("\nSuper! Następna donacja możliwa " + nextDonation + "\nW tym roku oddałeś: " + quantityYear + "l krwi, przysługuje Ci zwrot podatku w wysokości: " + taxBack + "zł.");
                                             break;
                                         }
                                     case 5:
                                         {
                                             donations = howManyTimes + 1;
-                                            taxBack = donations * quantityDonated * 130;
-                                            System.out.println("Podaj datę donacji w formacie rrrr-mm-dd");
-                                            String strDate2 = scan.nextLine();
-                                            SimpleDateFormat sdf2 = new SimpleDateFormat("yyyy-MM-dd");
-                                            Date date2 = sdf2.parse(strDate2);
-                                            System.out.println("Podaj datę kolejnej donacji w formacie rrrr-mm-dd");
-                                            String strDate3 = scan.nextLine();
-                                            SimpleDateFormat sdf3 = new SimpleDateFormat("yyyy-MM-dd");
-                                            Date date3 = sdf3.parse(strDate3);
-                                            System.out.println("Podaj datę kolejnej donacji w formacie rrrr-mm-dd");
-                                            String strDate4 = scan.nextLine();
-                                            SimpleDateFormat sdf4 = new SimpleDateFormat("yyyy-MM-dd");
-                                            Date date4 = sdf4.parse(strDate4);
-                                            System.out.println("Podaj datę kolejnej donacji w formacie rrrr-mm-dd");
-                                            String strDate5 = scan.nextLine();
-                                            SimpleDateFormat sdf5 = new SimpleDateFormat("yyyy-MM-dd");
-                                            Date date5 = sdf5.parse(strDate5);
-                                            System.out.println("Podaj datę kolejnej donacji w formacie rrrr-mm-dd");
-                                            String strDate6 = scan.nextLine();
-                                            SimpleDateFormat sdf6 = new SimpleDateFormat("yyyy-MM-dd");
-                                            Date date6 = sdf6.parse(strDate6);
+                                            quantityYear = donations * quantity;
+                                            taxBack = quantityYear * 130;
+                                            System.out.println("Podaj datę donacji w formacie rrrr-MM-dd");
+                                            String date2 = scan.readLine();
+                                            LocalDate donation2 = LocalDate.parse(date2, DateTimeFormatter.ofPattern("yyyy-MM-dd"));
+                                            System.out.println("Podaj datę kolejnej donacji w formacie rrrr-MM-dd");
+                                            String date3 = scan.readLine();
+                                            LocalDate donation3 = LocalDate.parse(date3, DateTimeFormatter.ofPattern("yyyy-MM-dd"));
+                                            System.out.println("Podaj datę kolejnej donacji w formacie rrrr-MM-dd");
+                                            String date4 = scan.readLine();
+                                            LocalDate donation4 = LocalDate.parse(date4, DateTimeFormatter.ofPattern("yyyy-MM-dd"));
+                                            System.out.println("Podaj datę kolejnej donacji w formacie rrrr-MM-dd");
+                                            String date5 = scan.readLine();
+                                            LocalDate donation5 = LocalDate.parse(date5, DateTimeFormatter.ofPattern("yyyy-MM-dd"));
+                                            System.out.println("Podaj datę kolejnej donacji w formacie rrrr-MM-dd");
+                                            String date6 = scan.readLine();
+                                            LocalDate donation6 = LocalDate.parse(date6, DateTimeFormatter.ofPattern("yyyy-MM-dd"));
+                                            LocalDate nextDonation = donation6.plusDays(56);
+                                            System.out.println("\nSuper! Następna donacja możliwa " + nextDonation + "\nW tym roku oddałeś: " + quantityYear + "l krwi, przysługuje Ci zwrot podatku w wysokości: " + taxBack + "zł.");
                                             break;
                                         }
                                 }
                                 System.out.println("Masz oddane: " + quantityYear + "l krwi co przekłada się na: " + taxBack + "zł zwrotu podatku, ekstra, nie?");
-                            System.in.read();
+                            
                         }
                     }
-                } else if (first.age < 18)
-                {
+                } else if (first.age < 18) {
                     System.out.println("\nPrzykro mi ale jesteś za młody na oddawanie krwi, minimalny wiek to 18 lat");
-                    System.in.read();
-                } else if (first.age > 65)
-                {
+                } else if (first.age > 65) {
                     System.out.println("\nPrzykro mi ale maksymalny wiek krwiodawcy to 65 lat.");
-                    System.in.read();
                 }
-            } else if (strTN == "N" || strTN == "n")
-            {
+            } else if ((strTN.equals("N")) || (strTN.equals("n"))) {
                 System.out.print("\nKtóra dana jest niewłaściwa? \n[1] Imię\n[2] Płeć\n[3] Waga\n[4] Wiek ");
-                int Error = scan.nextInt();
-                switch (Error)
-                {
+                int Error = Integer.parseInt(scan.readLine());
+                switch (Error) {
                     case 1:
                         System.out.println("Podaj poprawne imię: ");
-                        first.firstName = scan.nextLine();
+                        first.firstName = scan.readLine();
                         break;
                     case 2:
                         System.out.println("Podaj swoją płeć: M lub K");
-                        first.gender = scan.nextLine();
+                        first.gender = scan.readLine();
                         break;
                     case 3:
                         System.out.println("Podaj poprawną wagę: ");
-                        first.weight = scan.nextFloat();
+                        first.weight = Float.parseFloat(scan.readLine());
                         break;
                     case 4:
                         System.out.println("Podaj poprawny wiek: ");
-                        first.age = scan.nextInt();
+                        first.age = Integer.parseInt(scan.readLine());
                         break;
                 }
                 System.out.println("\nImię: " + first.firstName + "\nPłeć: " + first.gender + "ężczyzna" + "\nWaga: " + first.weight + "kg\nWiek: " + first.age);
                 System.out.print("Czy oddałeś dziś krew? " );
-                String TN = scan.nextLine();
-                if (TN == "T" || TN == "t")
-                {
+                String TN = scan.readLine();
+                if ((TN.equals("T")) || (TN.equals("t"))) {
                     donations = 1;
-                    taxBack = donations * quantityDonated * 130;
-                    LocalDate date = LocalDate.now();
-                    LocalDate futureDate = date.plusDays(daysLeft);
-                    System.out.println("\nSuper! Następna donacja możliwa " + futureDate);
-                    
+                    quantityYear = donations * quantity;
+                    taxBack = quantityYear * 130;
+                    LocalDate donationDate = LocalDate.now();
+                    LocalDate nextDonationDate = donationDate.plusDays(56);
+                    System.out.println("\nSuper! Następna donacja możliwa " + nextDonationDate);
                            
                         donations += donations;
-                        taxBack = donations * quantityDonated * 130;
-                        System.out.println("Podaj datę w formacie rrrr-mm-dd");
-                        String strDate2 = scan.nextLine();
-                        SimpleDateFormat sdf2 = new SimpleDateFormat("yyyy-MM-dd");
-                        Date date2 = sdf2.parse(strDate2);
-                        System.out.println("Masz oddane: " + quantityDonated + "l krwi co przekłada się na: " + taxBack + "zł zwrotu podatku, ekstra, nie?");
-                        
+                        quantityYear = donations * quantity;
+                        taxBack = quantityYear * 130;
+                        System.out.println("Podaj datę w formacie rrrr-MM-dd");
+                        String date2 = scan.readLine();
+                        LocalDate donation2 = LocalDate.parse(date2, DateTimeFormatter.ofPattern("yyyy-MM-dd"));
+                        LocalDate nextDonation = donation2.plusDays(56);
+                        System.out.println("\nSuper! Następna donacja możliwa " + nextDonation + "\nW tym roku oddałeś: " + quantityYear + "l krwi, przysługuje Ci zwrot podatku w wysokości: " + taxBack + "zł.");
                     }
-                    
                 }
-                System.in.read();
             }
-        } else if (first.gender == "K" || first.gender == "k")
-        {
+        } else if ((first.gender.equals("K")) || (first.gender.equals("k"))) {
+        	class Woman extends Human {
+        		int age;
+        	 	float weight;
+        	 	String firstName;
+        	}
+        	Woman female = new Woman();
+        	female.age = first.age;
+        	female.weight = first.weight;
+        	female.firstName = first.firstName;
+        	System.out.println("\nImię: " + female.firstName + "\nPłeć: Kobieta" + "\nWaga: " + female.weight + "kg\nWiek: " + female.age);
+            System.out.print("\nCzy potwierdzasz kartę? \nT - Tak\nN - Nie ");
+            String strTN = scan.readLine();
+            if ((strTN.equals("T")) || (strTN.equals("t"))) {
+                if (female.age >= 18 && female.age <= 65) {
+                    if (female.weight <= 50) {
+                        System.out.println("\nPrzykro mi ale nie możesz zostać krwiodawcą, musisz ważyć minimum 50kg");
+                        //System.in.read();
+                    } else if (female.weight > 50) {
+                        System.out.println("\nSuper, spełniasz warunki krwiodawcy, zapraszamy do najbliższego RCKiK wraz z dowodem osobistym");
+                        System.out.print("Czy oddałeś dziś krew? ");
+                        String TN = scan.readLine();
+                        if ((TN.equals("T")) || (TN.equals("t"))) {
+                            donations = 1;
+                            quantityYear = donations * quantity;
+                            taxBack = quantityYear * 130;
+                            LocalDate donationDate = LocalDate.now();
+                            LocalDate nextDonationDate = donationDate.plusDays(56);
+                            System.out.println("\nSuper! Następna donacja możliwa " + nextDonationDate + "\nW tym roku oddałeś: " + quantityYear + "l krwi, przysługuje Ci zwrot podatku w wysokości: " + taxBack + "zł.");
+                            System.out.println("Czy oddawałeś krew jeszcze w tym roku?");
+                            strTN = scan.readLine();
+                            if ((strTN.equals("T")) || (strTN.equals("t"))) {
+                                System.out.println("Ile razy? ");                //dodawanie dat donacji
+                                int howManyTimes = Integer.parseInt(scan.readLine());
+                                quantityYear = (howManyTimes + 1) * quantity;
+                                
+                                switch (howManyTimes) {
+                                    case 1:
+                                        {
+                                            donations += donations;
+                                            quantityYear = donations * quantity;
+                                            taxBack = quantityYear * 130;
+                                            System.out.println("Podaj datę w formacie rrrr-MM-dd");
+                                            String date2 = scan.readLine();
+                                            LocalDate donation2 = LocalDate.parse(date2, DateTimeFormatter.ofPattern("yyyy-MM-dd"));
+                                            LocalDate nextDonation = donation2.plusDays(56);
+                                            System.out.println("\nSuper! Następna donacja możliwa " + nextDonation + "\nW tym roku oddałeś: " + quantityYear + "l krwi, przysługuje Ci zwrot podatku w wysokości: " + taxBack + "zł.");
+                                            break;
+                                        }
+                                    case 2:
+                                        {
+                                            donations = howManyTimes + 1;
+                                            quantityYear = donations * quantity;
+                                            taxBack = quantityYear * 130;
+                                            System.out.println("Podaj datę donacji w formacie rrrr-MM-dd");
+                                            String date2 = scan.readLine();
+                                            LocalDate donation2 = LocalDate.parse(date2, DateTimeFormatter.ofPattern("yyyy-MM-dd"));
+                                            System.out.println("Podaj datę kolejnej donacji w formacie rrrr-MM-dd");
+                                            String date3 = scan.readLine();
+                                            LocalDate donation3 = LocalDate.parse(date3, DateTimeFormatter.ofPattern("yyyy-MM-dd"));
+                                            LocalDate nextDonation = donation3.plusDays(56);
+                                            System.out.println("\nSuper! Następna donacja możliwa " + nextDonation + "\nW tym roku oddałeś: " + quantityYear + "l krwi, przysługuje Ci zwrot podatku w wysokości: " + taxBack + "zł.");
+                                            break;
+                                        }
+                                    case 3:
+                                        {
+                                            donations = howManyTimes + 1;
+                                            quantityYear = donations * quantity;
+                                            taxBack = quantityYear * 130;
+                                            System.out.println("Podaj datę donacji w formacie rrrr-MM-dd");
+                                            String date2 = scan.readLine();
+                                            LocalDate donation2 = LocalDate.parse(date2, DateTimeFormatter.ofPattern("yyyy-MM-dd"));
+                                            System.out.println("Podaj datę kolejnej donacji w formacie rrrr-MM-dd");
+                                            String date3 = scan.readLine();
+                                            LocalDate donation3 = LocalDate.parse(date3, DateTimeFormatter.ofPattern("yyyy-MM-dd"));
+                                            System.out.println("Podaj datę kolejnej donacji w formacie rrrr-MM-dd");
+                                            String date4 = scan.readLine();
+                                            LocalDate donation4 = LocalDate.parse(date4, DateTimeFormatter.ofPattern("yyyy-MM-dd"));
+                                            LocalDate nextDonation = donation4.plusDays(56);
+                                            System.out.println("\nSuper! Następna donacja możliwa " + nextDonation + "\nW tym roku oddałeś: " + quantityYear + "l krwi, przysługuje Ci zwrot podatku w wysokości: " + taxBack + "zł.");
+                                            break;
+                                        }
+                                    case 4:
+                                        {
+                                            donations = howManyTimes + 1;
+                                            quantityYear = donations * quantity;
+                                            taxBack = quantityYear * 130;
+                                            System.out.println("Podaj datę donacji w formacie rrrr-MM-dd");
+                                            String date2 = scan.readLine();
+                                            LocalDate donation2 = LocalDate.parse(date2, DateTimeFormatter.ofPattern("yyyy-MM-dd"));
+                                            System.out.println("Podaj datę kolejnej donacji w formacie rrrr-MM-dd");
+                                            String date3 = scan.readLine();
+                                            LocalDate donation3 = LocalDate.parse(date3, DateTimeFormatter.ofPattern("yyyy-MM-dd"));
+                                            System.out.println("Podaj datę kolejnej donacji w formacie rrrr-MM-dd");
+                                            String date4 = scan.readLine();
+                                            LocalDate donation4 = LocalDate.parse(date4, DateTimeFormatter.ofPattern("yyyy-MM-dd"));
+                                            System.out.println("Podaj datę kolejnej donacji w formacie rrrr-MM-dd");
+                                            String date5 = scan.readLine();
+                                            LocalDate donation5 = LocalDate.parse(date5, DateTimeFormatter.ofPattern("yyyy-MM-dd"));
+                                            LocalDate nextDonation = donation5.plusDays(56);
+                                            System.out.println("\nSuper! Następna donacja możliwa " + nextDonation + "\nW tym roku oddałeś: " + quantityYear + "l krwi, przysługuje Ci zwrot podatku w wysokości: " + taxBack + "zł.");
+                                            break;
+                                        }
+                                    case 5:
+                                        {
+                                            donations = howManyTimes + 1;
+                                            quantityYear = donations * quantity;
+                                            taxBack = quantityYear * 130;
+                                            System.out.println("Podaj datę donacji w formacie rrrr-MM-dd");
+                                            String date2 = scan.readLine();
+                                            LocalDate donation2 = LocalDate.parse(date2, DateTimeFormatter.ofPattern("yyyy-MM-dd"));
+                                            System.out.println("Podaj datę kolejnej donacji w formacie rrrr-MM-dd");
+                                            String date3 = scan.readLine();
+                                            LocalDate donation3 = LocalDate.parse(date3, DateTimeFormatter.ofPattern("yyyy-MM-dd"));
+                                            System.out.println("Podaj datę kolejnej donacji w formacie rrrr-MM-dd");
+                                            String date4 = scan.readLine();
+                                            LocalDate donation4 = LocalDate.parse(date4, DateTimeFormatter.ofPattern("yyyy-MM-dd"));
+                                            System.out.println("Podaj datę kolejnej donacji w formacie rrrr-MM-dd");
+                                            String date5 = scan.readLine();
+                                            LocalDate donation5 = LocalDate.parse(date5, DateTimeFormatter.ofPattern("yyyy-MM-dd"));
+                                            System.out.println("Podaj datę kolejnej donacji w formacie rrrr-MM-dd");
+                                            String date6 = scan.readLine();
+                                            LocalDate donation6 = LocalDate.parse(date6, DateTimeFormatter.ofPattern("yyyy-MM-dd"));
+                                            LocalDate nextDonation = donation6.plusDays(56);
+                                            System.out.println("\nSuper! Następna donacja możliwa " + nextDonation + "\nW tym roku oddałeś: " + quantityYear + "l krwi, przysługuje Ci zwrot podatku w wysokości: " + taxBack + "zł.");
+                                            break;
+                                        }
+                                }
+                                System.out.println("Masz oddane: " + quantityYear + "l krwi co przekłada się na: " + taxBack + "zł zwrotu podatku, ekstra, nie?");
+                            
+                        }
+                    }
+                } else if (female.age < 18) {
+                    System.out.println("\nPrzykro mi ale jesteś za młody na oddawanie krwi, minimalny wiek to 18 lat");
+                } else if (female.age > 65) {
+                    System.out.println("\nPrzykro mi ale maksymalny wiek krwiodawcy to 65 lat.");
+                }
+            } else if ((strTN.equals("N")) || (strTN.equals("n"))) {
+                System.out.print("\nKtóra dana jest niewłaściwa? \n[1] Imię\n[2] Płeć\n[3] Waga\n[4] Wiek ");
+                int Error = Integer.parseInt(scan.readLine());
+                switch (Error) {
+                    case 1:
+                        System.out.println("Podaj poprawne imię: ");
+                        female.firstName = scan.readLine();
+                        break;
+                    case 2:
+                        System.out.println("Podaj swoją płeć: M lub K");
+                        first.gender = scan.readLine();
+                        break;
+                    case 3:
+                        System.out.println("Podaj poprawną wagę: ");
+                        female.weight = Float.parseFloat(scan.readLine());
+                        break;
+                    case 4:
+                        System.out.println("Podaj poprawny wiek: ");
+                        female.age = Integer.parseInt(scan.readLine());
+                        break;
+                }
+                System.out.println("\nImię: " + female.firstName + "\nPłeć: Kobieta" + "\nWaga: " + female.weight + "kg\nWiek: " + female.age);
+                System.out.print("Czy oddałaś dziś krew? " );
+                String TN = scan.readLine();
+                if ((TN.equals("T")) || (TN.equals("t"))) {
+                    donations = 1;
+                    quantityYear = donations * quantity;
+                    taxBack = quantityYear * 130;
+                    LocalDate donationDate = LocalDate.now();
+                    LocalDate nextDonationDate = donationDate.plusDays(56);
+                    System.out.println("\nSuper! Następna donacja możliwa " + nextDonationDate);
+                           
+                        donations += donations;
+                        quantityYear = donations * quantity;
+                        taxBack = quantityYear * 130;
+                        System.out.println("Podaj datę w formacie rrrr-MM-dd");
+                        String date2 = scan.readLine();
+                        LocalDate donation2 = LocalDate.parse(date2, DateTimeFormatter.ofPattern("yyyy-MM-dd"));
+                        LocalDate nextDonation = donation2.plusDays(56);
+                        System.out.println("\nSuper! Następna donacja możliwa " + nextDonation + "\nW tym roku oddałaś: " + quantityYear + "l krwi, przysługuje Ci zwrot podatku w wysokości: " + taxBack + "zł.");
+                    }
+                }
+            }
         }
-    }
+	}
 }
