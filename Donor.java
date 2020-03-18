@@ -20,13 +20,12 @@ public class Donor {
         first.gender = scan.readLine();
         if ((first.gender.equals("M")) || (first.gender.equals("m"))) {
             System.out.println("\nImię: " + first.firstName + "\nPłeć: " + first.gender + "ężczyzna" + "\nWaga: " + first.weight + "kg\nWiek: " + first.age);
-            System.out.print("\nCzy potwierdzasz kartę? \nT - Tak\nN - Nie ");
+            System.out.print("\nCzy potwierdzasz kartę? \nT - Tak\nN - Nie ");    //nie działa nie 'N'
             String strTN = scan.readLine();
             if ((strTN.equals("T")) || (strTN.equals("t"))) {
                 if (first.age >= 18 && first.age <= 65) {
                     if (first.weight <= 50) {
                         System.out.println("\nPrzykro mi ale nie możesz zostać krwiodawcą, musisz ważyć minimum 50kg");
-                        //System.in.read();
                     } else if (first.weight > 50) {
                         System.out.println("\nSuper, spełniasz warunki krwiodawcy, zapraszamy do najbliższego RCKiK wraz z dowodem osobistym");
                         System.out.print("Czy oddałeś dziś krew? ");
@@ -45,7 +44,7 @@ public class Donor {
                                 int howManyTimes = Integer.parseInt(scan.readLine());
                                 quantityYear = (howManyTimes + 1) * quantity;
                                 
-                                switch (howManyTimes) {
+                               switch (howManyTimes) {
                                     case 1:
                                         {
                                             donations += donations;
@@ -136,9 +135,13 @@ public class Donor {
                                             System.out.println("\nSuper! Następna donacja możliwa " + nextDonation + "\nW tym roku oddałeś: " + quantityYear + "l krwi, przysługuje Ci zwrot podatku w wysokości: " + taxBack + "zł.");
                                             break;
                                         }
-                                }
-                                System.out.println("Masz oddane: " + quantityYear + "l krwi co przekłada się na: " + taxBack + "zł zwrotu podatku, ekstra, nie?");
-                            
+                                } System.out.println("Masz oddane: " + quantityYear + "l krwi co przekłada się na: " + taxBack + "zł zwrotu podatku, ekstra, nie?");
+                        } else if ((TN.equals("N")) || (TN.equals("n"))) {
+                        	taxBack = quantity * 130;
+                        	System.out.println("\nMasz oddane: " + quantity + "l krwi, przysługuje Ci " + taxBack + "zł zwrotu podatku.");
+                        } else if ((TN.equals("N")) || (TN.equals("n"))) {
+                        	taxBack = quantity * 130;
+                        	System.out.println("\nMasz oddane: " + quantity + "l krwi, przysługuje Ci " + taxBack + "zł zwrotu podatku.");
                         }
                     }
                 } else if (first.age < 18) {
@@ -146,7 +149,8 @@ public class Donor {
                 } else if (first.age > 65) {
                     System.out.println("\nPrzykro mi ale maksymalny wiek krwiodawcy to 65 lat.");
                 }
-            } else if ((strTN.equals("N")) || (strTN.equals("n"))) {
+            } 
+                } else if ((strTN.equals("N")) || (strTN.equals("n"))) {
                 System.out.print("\nKtóra dana jest niewłaściwa? \n[1] Imię\n[2] Płeć\n[3] Waga\n[4] Wiek ");
                 int Error = Integer.parseInt(scan.readLine());
                 switch (Error) {
@@ -166,8 +170,7 @@ public class Donor {
                         System.out.println("Podaj poprawny wiek: ");
                         first.age = Integer.parseInt(scan.readLine());
                         break;
-                }
-                System.out.println("\nImię: " + first.firstName + "\nPłeć: " + first.gender + "ężczyzna" + "\nWaga: " + first.weight + "kg\nWiek: " + first.age);
+                } System.out.println("\nImię: " + first.firstName + "\nPłeć: " + first.gender + "ężczyzna" + "\nWaga: " + first.weight + "kg\nWiek: " + first.age);
                 System.out.print("Czy oddałeś dziś krew? " );
                 String TN = scan.readLine();
                 if ((TN.equals("T")) || (TN.equals("t"))) {
@@ -186,19 +189,22 @@ public class Donor {
                         LocalDate donation2 = LocalDate.parse(date2, DateTimeFormatter.ofPattern("yyyy-MM-dd"));
                         LocalDate nextDonation = donation2.plusDays(56);
                         System.out.println("\nSuper! Następna donacja możliwa " + nextDonation + "\nW tym roku oddałeś: " + quantityYear + "l krwi, przysługuje Ci zwrot podatku w wysokości: " + taxBack + "zł.");
+                    } else if ((TN.equals("N")) || (TN.equals("n"))) {
+                    	System.out.println("Możesz udać się do najbliższego RCKiK oddać krew.");
                     }
                 }
-            }
         } else if ((first.gender.equals("K")) || (first.gender.equals("k"))) {
         	class Woman extends Human {
         		int age;
         	 	float weight;
         	 	String firstName;
         	}
+        	
         	Woman female = new Woman();
         	female.age = first.age;
         	female.weight = first.weight;
         	female.firstName = first.firstName;
+        	
         	System.out.println("\nImię: " + female.firstName + "\nPłeć: Kobieta" + "\nWaga: " + female.weight + "kg\nWiek: " + female.age);
             System.out.print("\nCzy potwierdzasz kartę? \nT - Tak\nN - Nie ");
             String strTN = scan.readLine();
@@ -206,10 +212,9 @@ public class Donor {
                 if (female.age >= 18 && female.age <= 65) {
                     if (female.weight <= 50) {
                         System.out.println("\nPrzykro mi ale nie możesz zostać krwiodawcą, musisz ważyć minimum 50kg");
-                        //System.in.read();
                     } else if (female.weight > 50) {
                         System.out.println("\nSuper, spełniasz warunki krwiodawcy, zapraszamy do najbliższego RCKiK wraz z dowodem osobistym");
-                        System.out.print("Czy oddałeś dziś krew? ");
+                        System.out.print("Czy oddałaś dziś krew? ");
                         String TN = scan.readLine();
                         if ((TN.equals("T")) || (TN.equals("t"))) {
                             donations = 1;
@@ -224,7 +229,6 @@ public class Donor {
                                 System.out.println("Ile razy? ");                //dodawanie dat donacji
                                 int howManyTimes = Integer.parseInt(scan.readLine());
                                 quantityYear = (howManyTimes + 1) * quantity;
-                                
                                 switch (howManyTimes) {
                                     case 1:
                                         {
@@ -316,15 +320,17 @@ public class Donor {
                                             System.out.println("\nSuper! Następna donacja możliwa " + nextDonation + "\nW tym roku oddałeś: " + quantityYear + "l krwi, przysługuje Ci zwrot podatku w wysokości: " + taxBack + "zł.");
                                             break;
                                         }
-                                }
-                                System.out.println("Masz oddane: " + quantityYear + "l krwi co przekłada się na: " + taxBack + "zł zwrotu podatku, ekstra, nie?");
-                            
+                                } System.out.println("Masz oddane: " + quantityYear + "l krwi co przekłada się na: " + taxBack + "zł zwrotu podatku, ekstra, nie?");
+                        } else if ((TN.equals("N")) || (TN.equals("n"))) {
+                        	taxBack = quantity * 130;
+                        	System.out.println("\nMasz oddane: " + quantity + "l krwi, przysługuje Ci " + taxBack + "zł zwrotu podatku.");
                         }
                     }
                 } else if (female.age < 18) {
                     System.out.println("\nPrzykro mi ale jesteś za młody na oddawanie krwi, minimalny wiek to 18 lat");
                 } else if (female.age > 65) {
                     System.out.println("\nPrzykro mi ale maksymalny wiek krwiodawcy to 65 lat.");
+                }
                 }
             } else if ((strTN.equals("N")) || (strTN.equals("n"))) {
                 System.out.print("\nKtóra dana jest niewłaściwa? \n[1] Imię\n[2] Płeć\n[3] Waga\n[4] Wiek ");
@@ -366,9 +372,8 @@ public class Donor {
                         LocalDate donation2 = LocalDate.parse(date2, DateTimeFormatter.ofPattern("yyyy-MM-dd"));
                         LocalDate nextDonation = donation2.plusDays(56);
                         System.out.println("\nSuper! Następna donacja możliwa " + nextDonation + "\nW tym roku oddałaś: " + quantityYear + "l krwi, przysługuje Ci zwrot podatku w wysokości: " + taxBack + "zł.");
-                    }
+                    } 
                 }
             }
         }
 	}
-}
